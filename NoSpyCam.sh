@@ -29,7 +29,7 @@ disable_webcam() {
         echo "Do you want to close the application(s)? (Y/N):"
         read -r response
 
-        if [[ $response =~ ^[Yn]$ ]]; then
+        if [[ $response =~ ^[Yy]$ ]]; then
             echo "Closing the application(s) that are using the Webcam"
             fuser -k /dev/video0
             sleep 2 # Wait a brief moment to ensure the application closes
