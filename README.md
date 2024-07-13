@@ -1,18 +1,14 @@
-# CamCtrl.sh
+# NoSpyCam.sh
 
-Um shell script que facilita a habilitação e desabilitação da webcam com simplicidade.
+A shell script that facilitates enabling and disabling the webcam with simplicity.
 
-## Requisitos
+## Requirements
+* Bash: The script is designed to run in a Bash environment.
+* Root/Superuser: To ensure the necessary permissions to control the webcam.
 
-- Bash: O script é desenvolvido para ser executado em um ambiente Bash.
-- Root/Superusuário: Para garantir as permissões necessárias para controlar a webcam.
-- (Opcional) Figlet: Caso queira adicionar um título estilizado, o Figlet é recomendado, mas opcional. Você pode instalá-lo usando o seguinte comando:
+## Usage
+* Clone the repository or download the NoSpyCam.sh script.
+* Open a terminal and navigate to the directory where the script is located.
+* Run the script as root/superuser:
   ```bash
-  sudo apt-get install figlet  # (ou o gerenciador de pacotes adequado para o seu sistema)
-
-## Uso
-- Clone o repositório ou baixe o script CamCtrl.sh.
-- Abra um terminal e navegue até o diretório onde o script está localizado.
-- Execute o script como root/superusuário:
-  ```bash
-  sudo bash CamCtrl.sh
+  sudo bash NoSpyCam.sh
