@@ -1,73 +1,68 @@
 #!/bin/bash
 
-# CamCtrl.sh - Script para controlar a webcam
-# Este script permite habilitar, desabilitar e verificar o status da webcam.
-# Certifique-se de executar como root/superusuário para garantir as permissões necessárias.
-
-# Função para exibir o menu
+# Function to show the menu
 show_menu() {
-    figlet "CamCtrl.sh"
-    echo "Gerencie sua webcam com facilidade!"
-    echo "===== Menu Webcam ====="
-    echo "1. Habilitar webcam"
-    echo "2. Desabilitar webcam"
-    echo "3. Sair"
+    clear
+    echo "No Spy Cam"
+    echo "======================="
+    echo "1. Turn on  [Webcam]"
+    echo "2. Turn off [Webcam]"
+    echo "3. Exit App"
     echo "======================="
 }
 
-# Função para habilitar a webcam
+# Function to enable the webcam
 enable_webcam() {
-    echo "Habilitando a webcam..."
+    echo "Turning ON your Webcam"
     modprobe uvcvideo
-    echo "Acesso à webcam habilitado."
+    echo "[Webcam] is: ENABLED"
 }
 
-# Função para desabilitar a webcam
+# Function to disable the webcam
 disable_webcam() {
-    echo "Desabilitando a webcam..."
+    echo "Disabling your Webcam"
 
-    # Verifica se algum processo está usando a webcam
+    # Check if any process is using a webcam
     if lsof /dev/video0 >/dev/null 2>&1; then
-        echo "Aplicativo(s) está(ão) usando a webcam:"
+        echo "Application(s) are using the Webcam:"
         lsof /dev/video0
-        echo "Deseja encerrar o(s) aplicativo(s)? (S/N): "
+        echo "Do you want to close the application(s)? (Y/N):"
         read -r response
 
-        if [[ $response =~ ^[Ss]$ ]]; then
-            echo "Encerrando o(s) aplicativo(s) que está(ão) usando a webcam..."
+        if [[ $response =~ ^[Yn]$ ]]; then
+            echo "Closing the application(s) that are using the Webcam"
             fuser -k /dev/video0
-            sleep 2 # Aguarda um breve momento para garantir que o aplicativo seja encerrado
+            sleep 2 # Wait a brief moment to ensure the application closes
         else
-            echo "Operação cancelada. A webcam não será desabilitada."
+            echo "Operation cancelled. The Webcam will not be disabled."
             return
         fi
     fi
 
     modprobe -r uvcvideo
-    echo "Acesso à webcam desabilitado."
+    echo "[Webcam] is: DISABLED"
 }
 
-# Função para verificar o status da webcam
+# Function to check webcam status
 check_webcam_status() {
     if lsmod | grep -q uvcvideo; then
-        echo "A webcam está atualmente: habilitada"
+        echo "Your Webcam is: ENABLED"
     else
-        echo "A webcam está atualmente: desabilitada"
+        echo "Your Webcam is: DISABLED"
     fi
 }
 
-# Verifica se o usuário é root
+# Checks if the user is root
 if [[ $EUID -ne 0 ]]; then
-    echo "Este script precisa ser executado como root/superusuário."
+    echo "This script needs to be run as root/superuser."
     exit 1
 fi
 
-# Exibe o status da webcam no início do script
-check_webcam_status
-
 while true; do
     show_menu
-    read -p "Escolha uma opção (1/2/3): " choice
+    check_webcam_status
+    echo "======================="
+    read -p "Choose an option (1/2/3): " choice
 
     case $choice in
         1)
@@ -77,12 +72,11 @@ while true; do
             disable_webcam
             ;;
         3)
-            echo "Saindo do menu."
+            echo "Exiting..."
             break
             ;;
         *)
-            echo "Opção inválida. Escolha novamente."
+            echo "Invalid option. Choose again."
             ;;
     esac
 done
-
