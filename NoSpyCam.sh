@@ -13,15 +13,11 @@ show_menu() {
 
 # Function to enable the webcam
 enable_webcam() {
-    echo "Turning ON your Webcam"
     modprobe uvcvideo
-    echo "[Webcam] is: ENABLED"
 }
 
 # Function to disable the webcam
 disable_webcam() {
-    echo "Disabling your Webcam"
-
     # Check if any process is using a webcam
     if lsof /dev/video0 >/dev/null 2>&1; then
         echo "Application(s) are using the Webcam:"
@@ -33,22 +29,26 @@ disable_webcam() {
             echo "Closing the application(s) that are using the Webcam"
             fuser -k /dev/video0
             sleep 2 # Wait a brief moment to ensure the application closes
+
+        elif [[ $response =~ ^[Nn]$ ]]; then
+            echo "Application not closed"
+            sleep 2
         else
-            echo "Operation cancelled. The Webcam will not be disabled."
-            return
+            echo "Invalid command. Try Again"
+            sleep 2 
+            clear
+            disable_webcam
         fi
     fi
-
     modprobe -r uvcvideo
-    echo "[Webcam] is: DISABLED"
 }
 
 # Function to check webcam status
 check_webcam_status() {
     if lsmod | grep -q uvcvideo; then
-        echo "Your Webcam is: ENABLED"
+        echo "Your Webcam is currently: [ ENABLED ]"
     else
-        echo "Your Webcam is: DISABLED"
+        echo "Your Webcam is currently: [ DISABLED ]"
     fi
 }
 
@@ -73,6 +73,8 @@ while true; do
             ;;
         3)
             echo "Exiting..."
+            sleep 1
+            clear
             break
             ;;
         *)
